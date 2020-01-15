@@ -108,33 +108,38 @@ dataset.all[727].tokenize()
 dataset.all[727].token_text[47][0].token
 
 # %%
-text_tag = dataset.all[727].raw_tag
-print(dataset.all[727].id)
-lignes = text_tag.split('\n')
-tag = []
-for lig in lignes :
-    tag.append(lig.split('|| '))
+for i in range(len(dataset.all)):
+    dataset.all[i].tokenize()
+    if dataset.all[i].raw_tag:
+        print('-------')
+        text_tag = dataset.all[i].raw_tag
+        print(dataset.all[i].id)
+        lignes = text_tag.split('\n')
+        tag = []
+        for lig in lignes :
+            tag.append(lig.split('||'))
 
-for item in tag:
-    for raw_tag in item:
-        if len(raw_tag.split('\"')) == 3:
-            tag, value, following = raw_tag.split('\"')
-            tag = re.sub('=', '', tag)
-            if len(following.split()) == 2:
-                beg, end = following.split()
-                l_beg, n_word_beg = map(int, beg.split(':'))
-                l_end, n_word_end = map(int, end.split(':'))
-                l_beg -= 1
-                value = value.split()
-                first_word = dataset.all[727].token_text[l_beg][n_word_beg].token
-                if value[0] != first_word.lower():
-                    print(f"value : {value}")
-                    print(f"first_word : {first_word}")
-                    print(f"l_beg : {l_beg}")
-                    print(f"n_word_beg : {n_word_beg}")
-        else:
-            result = raw_tag.split('\"')
-            print(f"pb avec tag : {result}")
+        for item in tag:
+            for raw_tag in item:
+                if len(raw_tag.split('\"')) == 3:
+                    tag, value, following = raw_tag.split('\"')
+                    tag = re.sub('=', '', tag)
+                    if len(following.split()) == 2:
+                        beg, end = following.split()
+                        l_beg, n_word_beg = map(int, beg.split(':'))
+                        l_end, n_word_end = map(int, end.split(':'))
+                        l_beg -= 1
+                        l_end -= 1
+                        value = value.split()
+                        first_word = dataset.all[i].token_text[l_beg][n_word_beg].token
+                        if value[0] != first_word.lower():
+                            print(f"value : {value}")
+                            print(f"first_word : {first_word}")
+                            print(f"l_beg : {l_beg}")
+                            print(f"n_word_beg : {n_word_beg}")
+                else:
+                    result = raw_tag.split('\"')
+                    print(f"pb avec tag : {result}")
 
 
 # %%
